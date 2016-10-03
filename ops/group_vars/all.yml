@@ -1,0 +1,35 @@
+---
+#
+# users and groups
+#
+users_and_groups:
+  - user_name: dev
+    group_name: dev
+app_user: "{{ users_and_groups[0] }}"
+
+#
+# hwy61
+#
+project_home: "/usr/local/src/dev"
+git_repo_url: https://github.com/ranchodeluxe/hwy61.git
+git_repo_branch: "master"
+project_root: "{{ project_home }}/{{ git_repo_url | basename | splitext | first }}"
+project_static_dir: "{{ project_root }}/static/"
+#requirements_file: "{{ project_root }}/requirements-dev.txt"
+#django_settings_mod_path: "core.settings.prod_{{ app_user.user_name }}"
+#settings_dest: "{{ project_root }}/core/settings/prod_{{ app_user.user_name }}.py"
+server_name: "localhost"
+
+#
+# postgres
+#
+db_name: hwy61
+db_user: "{{ app_user.user_name }}"
+db_password: hwy61
+pg_admin_user: 'postgres'
+
+
+#
+# nodejs
+#
+node_version: 4.6

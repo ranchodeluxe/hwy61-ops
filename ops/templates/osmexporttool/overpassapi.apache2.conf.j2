@@ -1,0 +1,36 @@
+<VirtualHost *:80>
+	ServerAdmin webmaster@localhost
+	ExtFilterDefine gzip mode=output cmd=/bin/gzip
+	DocumentRoot {{ overpass_exec_dir }}
+
+	# This directive indicates that whenever someone types http://www.mydomain.com/api/
+	# Apache2 should refer to what is in the local directory /usr/local/src/overpassapi/exec/cgi-bin/
+	ScriptAlias /api/ {{ overpass_exec_dir }}/cgi-bin/
+
+	<Directory "{{ overpass_exec_dir }}/">
+                AllowOverride None
+		        Options Indexes FollowSymLinks Includes ExecCGI
+                # For Apache 2.4:
+                #  Order allow,deny
+                # For Apache > 2.4:
+                Require all granted
+	</Directory>
+	<Directory "{{ overpass_exec_dir }}/cgi-bin/">
+                AllowOverride None
+                Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+                # For Apache 2.4:
+                #  Order allow,deny
+                # For Apache > 2.4:
+                Require all granted
+                #SetOutputFilter gzip
+                #Header set Content-Encoding gzip
+	</Directory>
+
+	ErrorLog /var/log/apache2/overpassapi_error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit, alert, emerg
+	LogLevel debug
+
+	CustomLog /var/log/apache2/overpassapi_access.log combined
+
+</VirtualHost>
